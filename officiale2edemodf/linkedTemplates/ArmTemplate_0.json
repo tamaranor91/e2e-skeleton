@@ -30,6 +30,112 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Parquet1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "test",
+						"folderPath": "outputDataSet",
+						"container": "officiale2econtainer"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/convertedParquet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "outputDataSet",
+						"container": "officiale2econtainer"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "County",
+						"type": "UTF8"
+					},
+					{
+						"name": "Year",
+						"type": "UTF8"
+					},
+					{
+						"name": "Population",
+						"type": "DECIMAL",
+						"precision": 38,
+						"scale": 18
+					},
+					{
+						"name": "IndexCount",
+						"type": "INT64"
+					},
+					{
+						"name": "IndexRate",
+						"type": "DECIMAL",
+						"precision": 38,
+						"scale": 18
+					},
+					{
+						"name": "ViolentCount",
+						"type": "INT64"
+					},
+					{
+						"name": "ViolentRate",
+						"type": "DECIMAL",
+						"precision": 38,
+						"scale": 18
+					},
+					{
+						"name": "PropertyCount",
+						"type": "INT64"
+					},
+					{
+						"name": "PropertyRate",
+						"type": "DECIMAL",
+						"precision": 38,
+						"scale": 18
+					},
+					{
+						"name": "FirearmCount",
+						"type": "INT64"
+					},
+					{
+						"name": "FirearmRate",
+						"type": "DECIMAL",
+						"precision": 38,
+						"scale": 18
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/inputDataSet')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -102,6 +208,173 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "County",
+											"type": "String"
+										},
+										"sink": {
+											"name": "County",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Year",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Year",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Population",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Population",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Index Count",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "IndexCount"
+										}
+									},
+									{
+										"source": {
+											"name": "Index Rate",
+											"type": "String"
+										},
+										"sink": {
+											"name": "IndexRate"
+										}
+									},
+									{
+										"source": {
+											"name": "Violent Count",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "ViolentCount"
+										}
+									},
+									{
+										"source": {
+											"name": "Violent Rate",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ViolentRate"
+										}
+									},
+									{
+										"source": {
+											"name": "Property Count",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "PropertyCount"
+										}
+									},
+									{
+										"source": {
+											"name": "Property Rate",
+											"type": "String"
+										},
+										"sink": {
+											"name": "PropertyRate"
+										}
+									},
+									{
+										"source": {
+											"name": "Firearm Count",
+											"type": "String"
+										},
+										"sink": {
+											"name": "FirearmCount"
+										}
+									},
+									{
+										"source": {
+											"name": "Firearm Rate",
+											"type": "String"
+										},
+										"sink": {
+											"name": "FirearmRate"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "inputDataSet",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Parquet1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/inputDataSet')]",
+				"[concat(variables('factoryId'), '/datasets/Parquet1')]"
 			]
 		}
 	]
