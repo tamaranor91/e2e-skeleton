@@ -6,10 +6,6 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "officiale2edemodf"
-		},
-		"AzureBlobStorage1_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
 		}
 	},
 	"variables": {
@@ -86,21 +82,6 @@
 						"type": "String"
 					}
 				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureBlobStorage1')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('AzureBlobStorage1_connectionString')]"
-				}
 			},
 			"dependsOn": []
 		}
