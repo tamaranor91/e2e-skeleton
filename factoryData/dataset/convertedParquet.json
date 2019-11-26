@@ -1,0 +1,75 @@
+{
+	"name": "convertedParquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "outputDataSet",
+				"container": "officiale2econtainer"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "County",
+				"type": "UTF8"
+			},
+			{
+				"name": "Year",
+				"type": "UTF8"
+			},
+			{
+				"name": "Population",
+				"type": "DECIMAL",
+				"precision": 38,
+				"scale": 18
+			},
+			{
+				"name": "IndexCount",
+				"type": "INT64"
+			},
+			{
+				"name": "IndexRate",
+				"type": "DECIMAL",
+				"precision": 38,
+				"scale": 18
+			},
+			{
+				"name": "ViolentCount",
+				"type": "INT64"
+			},
+			{
+				"name": "ViolentRate",
+				"type": "DECIMAL",
+				"precision": 38,
+				"scale": 18
+			},
+			{
+				"name": "PropertyCount",
+				"type": "INT64"
+			},
+			{
+				"name": "PropertyRate",
+				"type": "DECIMAL",
+				"precision": 38,
+				"scale": 18
+			},
+			{
+				"name": "FirearmCount",
+				"type": "INT64"
+			},
+			{
+				"name": "FirearmRate",
+				"type": "DECIMAL",
+				"precision": 38,
+				"scale": 18
+			}
+		]
+	}
+}
