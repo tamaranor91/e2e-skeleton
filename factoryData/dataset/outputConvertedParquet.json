@@ -1,0 +1,20 @@
+{
+	"name": "outputConvertedParquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "outputDataSet",
+				"container": "officiale2econtainer"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
