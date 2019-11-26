@@ -23,7 +23,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Copy data1",
+						"name": "restructeSchemaAndConvertToParquet",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {

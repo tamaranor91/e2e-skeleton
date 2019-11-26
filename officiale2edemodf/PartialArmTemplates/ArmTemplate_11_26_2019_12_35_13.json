@@ -1,0 +1,178 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "officiale2edemodf"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "restructeSchemaAndConvertToParquet",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "County",
+											"type": "String"
+										},
+										"sink": {
+											"name": "County",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Year",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Year",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Population",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Population",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Index Count",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "IndexCount"
+										}
+									},
+									{
+										"source": {
+											"name": "Index Rate",
+											"type": "String"
+										},
+										"sink": {
+											"name": "IndexRate"
+										}
+									},
+									{
+										"source": {
+											"name": "Violent Count",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "ViolentCount"
+										}
+									},
+									{
+										"source": {
+											"name": "Violent Rate",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ViolentRate"
+										}
+									},
+									{
+										"source": {
+											"name": "Property Count",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "PropertyCount"
+										}
+									},
+									{
+										"source": {
+											"name": "Property Rate",
+											"type": "String"
+										},
+										"sink": {
+											"name": "PropertyRate"
+										}
+									},
+									{
+										"source": {
+											"name": "Firearm Count",
+											"type": "String"
+										},
+										"sink": {
+											"name": "FirearmCount"
+										}
+									},
+									{
+										"source": {
+											"name": "Firearm Rate",
+											"type": "String"
+										},
+										"sink": {
+											"name": "FirearmRate"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "inputDataSet",
+								"type": "DatasetReference"
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Parquet1",
+								"type": "DatasetReference"
+							}
+						]
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": []
+		}
+	]
+}
