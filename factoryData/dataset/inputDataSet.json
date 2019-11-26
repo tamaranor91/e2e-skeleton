@@ -14,7 +14,7 @@
 				"folderPath": "inputDataSet",
 				"container": "officiale2econtainer"
 			},
-			"columnDelimiter": ",",
+			"columnDelimiter": ";",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
