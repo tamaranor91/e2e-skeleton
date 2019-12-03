@@ -1,0 +1,49 @@
+{
+	"name": "Parquet2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage4",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "outputDataSet",
+				"container": "democontainertwo"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "County",
+				"type": "UTF8"
+			},
+			{
+				"name": "Year",
+				"type": "UTF8"
+			},
+			{
+				"name": "Population",
+				"type": "INT64"
+			},
+			{
+				"name": "IndexCount",
+				"type": "UTF8"
+			},
+			{
+				"name": "IndexRate",
+				"type": "UTF8"
+			},
+			{
+				"name": "FirearmCount",
+				"type": "UTF8"
+			},
+			{
+				"name": "FirearmRate",
+				"type": "UTF8"
+			}
+		]
+	}
+}
