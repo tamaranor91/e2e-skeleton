@@ -14,6 +14,10 @@
 			],
 			"sinks": [
 				{
+					"dataset": {
+						"referenceName": "test",
+						"type": "DatasetReference"
+					},
 					"name": "sink1"
 				}
 			],
@@ -28,7 +32,7 @@
 					"name": "DerivedColumn1"
 				}
 			],
-			"script": "\n\nsource(output(\n\t\tCounty as string,\n\t\tYear as string,\n\t\tPopulation as string,\n\t\t{Index Count} as string,\n\t\t{Index Rate} as string,\n\t\t{Violent Count} as string,\n\t\t{Violent Rate} as string,\n\t\t{Property Count} as string,\n\t\t{Property Rate} as string,\n\t\t{Firearm Count} as string,\n\t\t{Firearm Rate} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true) ~> source1\nsource1 filter(County=='Alleghany' || County=='Broome' || County=='Bronx' || County=='Erie') ~> Filter1\nFilter1 sort(asc(Year, true)) ~> Sort1\nSort1 derive(deltaColumn = Population-{Index Count}) ~> DerivedColumn1\nDerivedColumn1 sink(partitionFileNames:['testDataFlow.csv'],\n\tpartitionBy('hash', 1)) ~> sink1"
+			"script": "\n\nsource(output(\n\t\tCounty as string,\n\t\tYear as string,\n\t\tPopulation as string,\n\t\t{Index Count} as string,\n\t\t{Index Rate} as string,\n\t\t{Violent Count} as string,\n\t\t{Violent Rate} as string,\n\t\t{Property Count} as string,\n\t\t{Property Rate} as string,\n\t\t{Firearm Count} as string,\n\t\t{Firearm Rate} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true) ~> source1\nsource1 filter(County=='Alleghany' || County=='Broome' || County=='Bronx' || County=='Erie') ~> Filter1\nFilter1 sort(asc(Year, true)) ~> Sort1\nSort1 derive(deltaColumn = Population-{Index Count}) ~> DerivedColumn1\nDerivedColumn1 sink(input(\n\t\tCounty as string,\n\t\tYear as string,\n\t\tPopulation as string,\n\t\t{Index Count} as string,\n\t\t{Index Rate} as string,\n\t\t{Violent Count} as string,\n\t\t{Violent Rate} as string,\n\t\t{Property Count} as string,\n\t\t{Property Rate} as string,\n\t\t{Firearm Count} as string,\n\t\t{Firearm Rate} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['testDataFlow.csv'],\n\tpartitionBy('hash', 1)) ~> sink1"
 		}
 	}
 }
