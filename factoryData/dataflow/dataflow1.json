@@ -1,0 +1,30 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "inputDataSet",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "Filter1"
+				},
+				{
+					"name": "Sort1"
+				},
+				{
+					"name": "DerivedColumn1"
+				}
+			],
+			"script": "\n\nsource(output(\n\t\tCounty as string,\n\t\tYear as string,\n\t\tPopulation as string,\n\t\t{Index Count} as integer '000',\n\t\t{Index Rate} as string,\n\t\t{Violent Count} as string,\n\t\t{Violent Rate} as string,\n\t\t{Property Count} as string,\n\t\t{Property Rate} as string,\n\t\t{Firearm Count} as string,\n\t\t{Firearm Rate} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true) ~> source1\nsource1 filter(County=='Erie' || County=='Bronx' || County=='Broome') ~> Filter1\nFilter1 sort(asc(Year, true)) ~> Sort1\nSort1 derive({calculated Column } = {Index Rate}-{Violent Count}) ~> DerivedColumn1"
+		}
+	}
+}
