@@ -1,0 +1,70 @@
+{
+	"name": "inputDataSet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage4",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Index__Violent__Property__and_Firearm_Rates_By_County__Beginning_1990.csv",
+				"folderPath": "inputDataSet",
+				"container": "democontainertwo"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"nullValue": "0.00",
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "County",
+				"type": "String"
+			},
+			{
+				"name": "Year",
+				"type": "String"
+			},
+			{
+				"name": "Population",
+				"type": "String"
+			},
+			{
+				"name": "Index Count",
+				"type": "String"
+			},
+			{
+				"name": "Index Rate",
+				"type": "String"
+			},
+			{
+				"name": "Violent Count",
+				"type": "String"
+			},
+			{
+				"name": "Violent Rate",
+				"type": "String"
+			},
+			{
+				"name": "Property Count",
+				"type": "String"
+			},
+			{
+				"name": "Property Rate",
+				"type": "String"
+			},
+			{
+				"name": "Firearm Count",
+				"type": "String"
+			},
+			{
+				"name": "Firearm Rate",
+				"type": "String"
+			}
+		]
+	}
+}
