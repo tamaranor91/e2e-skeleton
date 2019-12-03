@@ -33,6 +33,114 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/Parquet1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage4",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "outputDataSet",
+						"container": "democontainertwo"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "County",
+						"type": "UTF8"
+					},
+					{
+						"name": "Year",
+						"type": "UTF8"
+					},
+					{
+						"name": "Population",
+						"type": "INT64"
+					},
+					{
+						"name": "IndexCount",
+						"type": "UTF8"
+					},
+					{
+						"name": "IndexRate",
+						"type": "UTF8"
+					},
+					{
+						"name": "FirearmCount",
+						"type": "UTF8"
+					},
+					{
+						"name": "FirearmRate",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage4')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parquet2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage4",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "outputDataSet",
+						"container": "democontainertwo"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "County",
+						"type": "UTF8"
+					},
+					{
+						"name": "Year",
+						"type": "UTF8"
+					},
+					{
+						"name": "Population",
+						"type": "INT64"
+					},
+					{
+						"name": "IndexCount",
+						"type": "UTF8"
+					},
+					{
+						"name": "IndexRate",
+						"type": "UTF8"
+					},
+					{
+						"name": "FirearmCount",
+						"type": "UTF8"
+					},
+					{
+						"name": "FirearmRate",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage4')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/inputDataSet')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -432,7 +540,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "outputTestDemo",
+								"referenceName": "Parquet2",
 								"type": "DatasetReference"
 							},
 							"name": "sink1"
@@ -449,12 +557,12 @@
 							"name": "DerivedColumn1"
 						}
 					],
-					"script": "\n\nsource(output(\n\t\tCounty as string,\n\t\tYear as integer '000',\n\t\tPopulation as string,\n\t\t{Index Count} as string,\n\t\t{Index Rate} as string,\n\t\t{Violent Count} as string,\n\t\t{Violent Rate} as string,\n\t\t{Property Count} as string,\n\t\t{Property Rate} as string,\n\t\t{Firearm Count} as string,\n\t\t{Firearm Rate} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true) ~> source1\nsource1 filter(County=='Erie' || County=='Broome' || County=='Bronx') ~> Filter1\nFilter1 sort(asc(Year, true)) ~> Sort1\nSort1 derive({derived Column} = {Index Count}+{Violent Count}) ~> DerivedColumn1\nDerivedColumn1 sink(input(\n\t\tBronx as string,\n\t\t{2014} as string,\n\t\t{1440569.46} as string,\n\t\t{36030} as string,\n\t\t{2501.1} as string,\n\t\t{12713} as string,\n\t\t{882.5} as string,\n\t\t{23317} as string,\n\t\t{1618.6} as string,\n\t\tProp_9 as string,\n\t\tProp_10 as string,\n\t\tUserErrorInvalidDataValue as string,\n\t\t{Column 'Population' contains an invalid value '1440569.46'. Cannot convert '1440569.46' to type 'Int64'.} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['testOutputFile.csv'],\n\tpartitionBy('hash', 1)) ~> sink1"
+					"script": "\n\nsource(output(\n\t\tCounty as string,\n\t\tYear as string,\n\t\tPopulation as string,\n\t\t{Index Count} as string,\n\t\t{Index Rate} as string,\n\t\t{Violent Count} as string,\n\t\t{Violent Rate} as string,\n\t\t{Property Count} as string,\n\t\t{Property Rate} as string,\n\t\t{Firearm Count} as string,\n\t\t{Firearm Rate} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true) ~> source1\nsource1 filter(County=='Broome' || County=='Erie') ~> Filter1\nFilter1 sort(asc(Year, true)) ~> Sort1\nSort1 derive({derived column} = {Index Count}+{Violent Count}) ~> DerivedColumn1\nDerivedColumn1 sink(input(\n\t\tCounty as string,\n\t\tYear as string,\n\t\tPopulation as long,\n\t\tIndexCount as string,\n\t\tIndexRate as string,\n\t\tFirearmCount as string,\n\t\tFirearmRate as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:['convertedParquet.parquet'],\n\tmapColumn(\n\t\tCounty,\n\t\tYear,\n\t\tPopulation\n\t),\n\tpartitionBy('hash', 1)) ~> sink1"
 				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/inputDataSet')]",
-				"[concat(variables('factoryId'), '/datasets/outputTestDemo')]"
+				"[concat(variables('factoryId'), '/datasets/Parquet2')]"
 			]
 		}
 	]
