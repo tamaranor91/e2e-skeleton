@@ -1,0 +1,20 @@
+{
+	"name": "outputParquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage4",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "outputDataSet",
+				"container": "democontainertwo"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
