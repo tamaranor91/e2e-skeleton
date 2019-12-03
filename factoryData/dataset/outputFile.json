@@ -1,0 +1,76 @@
+{
+	"name": "outputFile",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage3",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "outputDataSet",
+				"container": "democontainertwo"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Bronx",
+				"type": "String"
+			},
+			{
+				"name": "2014",
+				"type": "String"
+			},
+			{
+				"name": "1440569.46",
+				"type": "String"
+			},
+			{
+				"name": "36030",
+				"type": "String"
+			},
+			{
+				"name": "2501.1",
+				"type": "String"
+			},
+			{
+				"name": "12713",
+				"type": "String"
+			},
+			{
+				"name": "882.5",
+				"type": "String"
+			},
+			{
+				"name": "23317",
+				"type": "String"
+			},
+			{
+				"name": "1618.6",
+				"type": "String"
+			},
+			{
+				"name": "Prop_9",
+				"type": "String"
+			},
+			{
+				"name": "Prop_10",
+				"type": "String"
+			},
+			{
+				"name": "UserErrorInvalidDataValue",
+				"type": "String"
+			},
+			{
+				"name": "Column 'Population' contains an invalid value '1440569.46'. Cannot convert '1440569.46' to type 'Int64'.",
+				"type": "String"
+			}
+		]
+	}
+}
