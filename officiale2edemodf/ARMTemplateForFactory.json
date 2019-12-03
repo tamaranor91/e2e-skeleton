@@ -11,9 +11,17 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
 		},
+		"AzureBlobStorage2_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage2'"
+		},
 		"AzureDatabricks1_accessToken": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accessToken' of 'AzureDatabricks1'"
+		},
+		"AzureBlobStorage3_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage3'"
 		}
 	},
 	"variables": {
@@ -21,357 +29,63 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/dataFlowExample')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
+			"name": "[concat(parameters('factoryName'), '/AzureBlobStorage1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"activities": [
-					{
-						"name": "dataflow1",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "dataflow1",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"source1": {},
-									"sink1": {}
-								}
-							},
-							"staging": {}
-						}
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/dataflow1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy data1",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "DelimitedTextSource",
-								"storeSettings": {
-									"type": "AzureBlobStorageReadSettings",
-									"recursive": true
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
-							},
-							"sink": {
-								"type": "ParquetSink",
-								"storeSettings": {
-									"type": "AzureBlobStorageWriteSettings"
-								}
-							},
-							"enableStaging": false,
-							"enableSkipIncompatibleRow": true,
-							"redirectIncompatibleRowSettings": {
-								"linkedServiceName": {
-									"referenceName": "AzureBlobStorage1",
-									"type": "LinkedServiceReference"
-								},
-								"path": "officiale2econtainer/outputDataSet"
-							},
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"name": "County",
-											"type": "String"
-										},
-										"sink": {
-											"name": "County",
-											"type": "String"
-										}
-									},
-									{
-										"source": {
-											"name": "Year",
-											"type": "String"
-										},
-										"sink": {
-											"name": "Year",
-											"type": "String"
-										}
-									},
-									{
-										"source": {
-											"name": "Population",
-											"type": "Int64"
-										},
-										"sink": {
-											"name": "Population",
-											"type": "String"
-										}
-									},
-									{
-										"source": {
-											"name": "Index Count",
-											"type": "Int64"
-										},
-										"sink": {
-											"name": "IndexCount"
-										}
-									},
-									{
-										"source": {
-											"name": "Index Rate",
-											"type": "String"
-										},
-										"sink": {
-											"name": "IndexRate"
-										}
-									},
-									{
-										"source": {
-											"name": "Violent Count",
-											"type": "Int64"
-										},
-										"sink": {
-											"name": "ViolentCount"
-										}
-									},
-									{
-										"source": {
-											"name": "Violent Rate",
-											"type": "String"
-										},
-										"sink": {
-											"name": "ViolentRate"
-										}
-									},
-									{
-										"source": {
-											"name": "Property Count",
-											"type": "String"
-										},
-										"sink": {
-											"name": "PropertyCount"
-										}
-									},
-									{
-										"source": {
-											"name": "Property Rate",
-											"type": "String"
-										},
-										"sink": {
-											"name": "PropertyRate"
-										}
-									},
-									{
-										"source": {
-											"name": "Firearm Count",
-											"type": "String"
-										},
-										"sink": {
-											"name": "FirearmCount"
-										}
-									},
-									{
-										"source": {
-											"name": "Firearm Rate",
-											"type": "String"
-										},
-										"sink": {
-											"name": "FirearmRate"
-										}
-									}
-								]
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "inputDataSet",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "Parquet1",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/inputDataSet')]",
-				"[concat(variables('factoryId'), '/datasets/Parquet1')]",
-				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pipeline2')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Notebook1",
-						"type": "DatabricksNotebook",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"notebookPath": "/Users/tnormile@e2evapoutlook.onmicrosoft.com/official_demo_e2e"
-						},
-						"linkedServiceName": {
-							"referenceName": "AzureDatabricks1",
-							"type": "LinkedServiceReference"
-						}
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureDatabricks1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Parquet1')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureBlobStorage1",
-					"type": "LinkedServiceReference"
-				},
 				"annotations": [],
-				"type": "Parquet",
+				"type": "AzureBlobStorage",
 				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"folderPath": "outputDataSet",
-						"container": "officiale2econtainer"
-					},
-					"compressionCodec": "snappy"
-				},
-				"schema": []
+					"connectionString": "[parameters('AzureBlobStorage1_connectionString')]"
+				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
-			]
+			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/exampleOutput')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
+			"name": "[concat(parameters('factoryName'), '/AzureBlobStorage2')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureBlobStorage1",
-					"type": "LinkedServiceReference"
-				},
 				"annotations": [],
-				"type": "DelimitedText",
+				"type": "AzureBlobStorage",
 				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"folderPath": "outputDataSet",
-						"container": "officiale2econtainer"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "Bronx",
-						"type": "String"
-					},
-					{
-						"name": "2014",
-						"type": "String"
-					},
-					{
-						"name": "1440569.46",
-						"type": "String"
-					},
-					{
-						"name": "36030",
-						"type": "String"
-					},
-					{
-						"name": "2501.1",
-						"type": "String"
-					},
-					{
-						"name": "12713",
-						"type": "String"
-					},
-					{
-						"name": "882.5",
-						"type": "String"
-					},
-					{
-						"name": "23317",
-						"type": "String"
-					},
-					{
-						"name": "1618.6",
-						"type": "String"
-					},
-					{
-						"name": "Prop_9",
-						"type": "String"
-					},
-					{
-						"name": "Prop_10",
-						"type": "String"
-					},
-					{
-						"name": "UserErrorInvalidDataValue",
-						"type": "String"
-					},
-					{
-						"name": "Column 'Population' contains an invalid value '1440569.46'. Cannot convert '1440569.46' to type 'Int64'.",
-						"type": "String"
-					}
-				]
+					"connectionString": "[parameters('AzureBlobStorage2_connectionString')]"
+				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
-			]
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureDatabricks1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureDatabricks",
+				"typeProperties": {
+					"domain": "https://eastus2.azuredatabricks.net",
+					"accessToken": {
+						"type": "SecureString",
+						"value": "[parameters('AzureDatabricks1_accessToken')]"
+					},
+					"newClusterNodeType": "Standard_DS3_v2",
+					"newClusterNumOfWorker": "1:8",
+					"newClusterVersion": "3.5.x-scala2.10"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobStorage3')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureBlobStorage3_connectionString')]"
+				}
+			},
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/inputDataSet')]",
@@ -379,7 +93,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "AzureBlobStorage1",
+					"referenceName": "AzureBlobStorage3",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -389,7 +103,7 @@
 						"type": "AzureBlobStorageLocation",
 						"fileName": "Index__Violent__Property__and_Firearm_Rates_By_County__Beginning_1990.csv",
 						"folderPath": "inputDataSet",
-						"container": "officiale2econtainer"
+						"container": "democontainertwo"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
@@ -445,85 +159,172 @@
 				]
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage3')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/AzureBlobStorage1')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('AzureBlobStorage1_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureDatabricks1')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureDatabricks",
-				"typeProperties": {
-					"domain": "https://eastus2.azuredatabricks.net",
-					"accessToken": {
-						"type": "SecureString",
-						"value": "[parameters('AzureDatabricks1_accessToken')]"
-					},
-					"newClusterNodeType": "Standard_DS3_v2",
-					"newClusterNumOfWorker": "1:8",
-					"newClusterVersion": "3.5.x-scala2.10"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/dataflow1')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
+				"activities": [
+					{
+						"name": "convertToParquet",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"enableSkipIncompatibleRow": true,
+							"redirectIncompatibleRowSettings": {
+								"linkedServiceName": {
+									"referenceName": "AzureBlobStorage3",
+									"type": "LinkedServiceReference"
+								},
+								"path": "democontainertwo/outputDataSet"
+							},
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "County",
+											"type": "String"
+										},
+										"sink": {
+											"name": "County",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Year",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Year",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Population",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "Population",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Index Count",
+											"type": "String"
+										},
+										"sink": {
+											"name": "IndexCount"
+										}
+									},
+									{
+										"source": {
+											"name": "Index Rate",
+											"type": "String"
+										},
+										"sink": {
+											"name": "IndexRate"
+										}
+									},
+									{
+										"source": {
+											"name": "Firearm Count",
+											"type": "String"
+										},
+										"sink": {
+											"name": "FirearmCount"
+										}
+									},
+									{
+										"source": {
+											"name": "Firearm Rate",
+											"type": "String"
+										},
+										"sink": {
+											"name": "FirearmRate"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
 								"referenceName": "inputDataSet",
-								"type": "DatasetReference"
-							},
-							"name": "source1",
-							"typeProperties": {}
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "exampleOutput",
-								"type": "DatasetReference"
-							},
-							"name": "sink1"
-						}
-					],
-					"transformations": [
-						{
-							"name": "Filter1"
-						},
-						{
-							"name": "Sort1"
-						},
-						{
-							"name": "DerivedColumn1"
-						}
-					],
-					"script": "\n\nsource(output(\n\t\tCounty as string,\n\t\tYear as string,\n\t\tPopulation as integer,\n\t\t{Index Count} as integer,\n\t\t{Index Rate} as string,\n\t\t{Violent Count} as integer,\n\t\t{Violent Rate} as string,\n\t\t{Property Count} as string,\n\t\t{Property Rate} as string,\n\t\t{Firearm Count} as string,\n\t\t{Firearm Rate} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true) ~> source1\nsource1 filter(County=='Alleghany' || County=='Broome' || County=='Bronx' || County=='Erie') ~> Filter1\nFilter1 sort(asc(Year, true)) ~> Sort1\nSort1 derive(deltaColumn = Population-{Index Count}) ~> DerivedColumn1\nDerivedColumn1 sink(input(\n\t\tBronx as string,\n\t\t{2014} as string,\n\t\t{1440569.46} as string,\n\t\t{36030} as string,\n\t\t{2501.1} as string,\n\t\t{12713} as string,\n\t\t{882.5} as string,\n\t\t{23317} as string,\n\t\t{1618.6} as string,\n\t\tProp_9 as string,\n\t\tProp_10 as string,\n\t\tUserErrorInvalidDataValue as string,\n\t\t{Column 'Population' contains an invalid value '1440569.46'. Cannot convert '1440569.46' to type 'Int64'.} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['testDataFlow.csv'],\n\tpartitionBy('hash', 1)) ~> sink1"
-				}
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "convertedParquet",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"annotations": []
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/inputDataSet')]",
-				"[concat(variables('factoryId'), '/datasets/exampleOutput')]"
+				"[concat(variables('factoryId'), '/datasets/convertedParquet')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage3')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/convertedParquet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage3",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "outputDataSet",
+						"container": "democontainertwo"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage3')]"
 			]
 		}
 	]
