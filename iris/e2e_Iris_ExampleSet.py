@@ -1,6 +1,6 @@
 # Databricks notebook source
-# compare algorithms
 import numpy as np
+import mlflow
 import pandas as pd
 import seaborn as sns
 sns.set_palette('husl')
@@ -11,22 +11,23 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 
-import mlflow
+storage_account_name = "e2estacct"
+storage_account_access_key = "8lmLk6QS6VNWTd6xHRp7eDi/9NmLAzt/Yn+EIo5aW6/8pshKe50MRj7XcDq1hbF4yhaAl3ohtpLOG4EXhOVEMA=="
 
-storage_account_name = "e2edevelopment"
-storage_account_access_key = "sxmLpkte93LHpWg4SwKKuJplBcFgKXk6KjN9K35dJhIsDb+vI+dNfDB42B82tGkrgJJo8E7DPRxqHLSd6hbA8w=="
-
-file_location = "wasbs://e2edbstorage@e2edevelopment.blob.core.windows.net/e2edbstorage/E2Edata/Iris.csv"
+#file_location = "wasbs://datasets@e2estacct.blob.core.windows.net/datasets/Iris.csv"
+file_location = "wasbs://datasets@e2estacct.blob.core.windows.net/"
 file_type = "csv"
+
 
 spark.conf.set("fs.azure.account.key."+storage_account_name+".blob.core.windows.net",storage_account_access_key)
 
-Iris = spark.read.csv("wasbs://e2edbstorage@e2edevelopment.blob.core.windows.net/E2Edata/Iris.csv")
+Iris = spark.read.csv(file_location)
 data = Iris.toPandas()
 print(data.head())
 #data = pd.read_csv(file_location)
 
-mlflow.set_experiment("/Users/tnormile@e2evapoutlook.onmicrosoft.com/my-experiment-test-2")
+## call to track mlflow experiments
+mlflow.set_experiment("/Users/tnormile@e2evapoutlook.onmicrosoft.com/e2e_ml_test_1")
 
 new_header = data.iloc[0]
 data = data[1:]
@@ -38,8 +39,6 @@ tmp = data.drop('Id', axis=1)
 g = sns.pairplot(tmp, hue='Species', markers='+')
 display(plt.show())
 
-
-#mlflow.log_artifact("wasbs://e2edbstorage@e2edevelopment.blob.core.windows.net/E2Edata/output1.txt")
 
 # COMMAND ----------
 
@@ -117,8 +116,28 @@ knn.predict([[6, 3, 4, 2]])
 
 # COMMAND ----------
 
-with mlflow.start_run(nested=True):
-  mlflow.log_metric("sepal-length",2,step=1)
-with open("output1.txt", "w") as f:
-   f.write("Hello World")
-mlflow.log_artifact("output1.txt")
+mlflow.create_experiment('/Users/tnormile@e2evapoutlook.onmicrosoft.com/Model 1/Experiments/test3')
+test = test + str(1)
+
+mlflow.end_run()
+with mlflow.start_run() as run:
+  mlflow.log_param("param1", 5)
+  mlflow.log_metric("foo",2,step=1)
+  mlflow.log_metric("foo",4,step=2)
+  mlflow.log_metric("foo",6,step=3)
+  
+with open("output.parquet", "w") as f:
+  f.write("Hello world!")
+mlflow.log_artifact("output.parquet")
+
+
+# COMMAND ----------
+
+from mlflow.tracking import MlflowClient
+client = MlflowClient()
+experiments = client.list_exeperiments()
+run = client.create_run(experiments[0].experiment_id)
+client.log_param(run.infor.run_id, "hello", "world")
+client.set_terminated(run.info.run_i)
+
+
